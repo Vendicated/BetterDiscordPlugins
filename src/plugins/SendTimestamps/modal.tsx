@@ -15,7 +15,7 @@ const {
 } = BdApi.Webpack.getModule(m => m.ModalContent);
 
 const Parser = BdApi.Webpack.getModule(m => m.parseTopic);
-const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass, {
+const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
     searchExports: true
 });
 const ButtonWrapperClasses = BdApi.Webpack.getModule(m => m.buttonWrapper && m.buttonContent);
