@@ -13,7 +13,8 @@ function start() {
             walkable: ["props", "children"]
         });
 
-        BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, _args2, buttonsRes) => {
+        BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
+            if (props.disabled) return;
             buttonsRes.props.children.unshift(<ChatBarComponent />);
         });
     });

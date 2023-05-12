@@ -166,7 +166,9 @@ function start() {
     const inner = BdApi.Utils.findInTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"), {
       walkable: ["props", "children"]
     });
-    BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, _args2, buttonsRes) => {
+    BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
+      if (props.disabled)
+        return;
       buttonsRes.props.children.unshift(/* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
     });
   });
