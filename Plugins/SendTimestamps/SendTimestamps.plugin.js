@@ -104,7 +104,58 @@ function ChatBarComponent() {
 }
 
 // include-file:~fileContent/styles.css
-var styles_default = '.vbd-st-modal-content input {\n    background-color: var(--input-background);\n    color: var(--text-normal);\n    width: 95%;\n    padding: 8px 8px 8px 12px;\n    margin: 1em 0;\n    outline: none;\n    border: 1px solid var(--input-background);\n    border-radius: 4px;\n    font-weight: 500;\n    font-style: inherit;\n    font-size: 100%;\n}\n\n.vbd-st-format-label,\n.vbd-st-format-label span {\n    background-color: transparent;\n}\n\n.vbd-st-modal-content [class|="select"] {\n    margin-bottom: 1em;\n}\n\n.vbd-st-modal-content [class|="select"] span {\n    background-color: var(--input-background);\n}\n\n.vbd-st-modal-header {\n    justify-content: space-between;\n    align-content: center;\n}\n\n.vbd-st-modal-header h1 {\n    margin: 0;\n}\n\n.vbd-st-modal-header button {\n    padding: 0;\n}\n\n.vbd-st-preview-text {\n    margin-bottom: 1em;\n}\n\n.vbd-st-button {\n    padding: 0 6px;\n}\n\n.vbd-st-button svg {\n    transform: scale(1.1) translateY(1px);\n}\n';
+var styles_default = `.vbd-st-modal-content input {
+    background-color: var(--input-background);
+    color: var(--text-normal);
+    width: 95%;
+    padding: 8px 8px 8px 12px;
+    margin: 1em 0;
+    outline: none;
+    border: 1px solid var(--input-background);
+    border-radius: 4px;
+    font-weight: 500;
+    font-style: inherit;
+    font-size: 100%;
+}
+
+.vbd-st-format-label,
+.vbd-st-format-label span {
+    background-color: transparent;
+}
+
+.vbd-st-modal-content [class|="select"] {
+    margin-bottom: 1em;
+}
+
+.vbd-st-modal-content [class|="select"] span {
+    background-color: var(--input-background);
+}
+
+.vbd-st-modal-header {
+    justify-content: space-between;
+    align-content: center;
+}
+
+.vbd-st-modal-header h1 {
+    margin: 0;
+}
+
+.vbd-st-modal-header button {
+    padding: 0;
+}
+
+.vbd-st-preview-text {
+    margin-bottom: 1em;
+}
+
+.vbd-st-button {
+    padding: 0 6px;
+}
+
+.vbd-st-button svg {
+    transform: scale(1.1) translateY(1px);
+}
+`;
 
 // src/plugins/SendTimestamps/index.jsx
 var Chat = BdApi.Webpack.getModule((m) => m.Z?.type?.render?.toString().includes("chat input type must be set"));

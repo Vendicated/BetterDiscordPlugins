@@ -61,8 +61,10 @@ const plugins = await Promise.all(
                         }));
                         build.onLoad({ filter, namespace: "include-file" }, async ({ pluginData: { path } }) => {
                             const [name, format] = path.split(";");
+                            let content = await readFile(name, format ?? "utf-8");
+                            content = content.replace(/`/g, "\\`");
                             return {
-                                contents: `export default ${JSON.stringify(await readFile(name, format ?? "utf-8"))}`
+                                contents: `export default \`${content}\``
                             };
                         });
                     }
