@@ -29,7 +29,7 @@ var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeNam
 });
 var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
 var ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, { searchExports: true });
-var cl = (...names) => names.map((n) => `vc-st-${n}`).join(" ");
+var cl = (...names) => names.map((n) => `vbd-st-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
   const [value, setValue] = useState();
@@ -104,7 +104,7 @@ function ChatBarComponent() {
 }
 
 // include-file:~fileContent/styles.css
-var styles_default = '.vc-st-modal-content input {\n    background-color: var(--input-background);\n    color: var(--text-normal);\n    width: 95%;\n    padding: 8px 8px 8px 12px;\n    margin: 1em 0;\n    outline: none;\n    border: 1px solid var(--input-background);\n    border-radius: 4px;\n    font-weight: 500;\n    font-style: inherit;\n    font-size: 100%;\n}\n\n.vc-st-format-label,\n.vc-st-format-label span {\n    background-color: transparent;\n}\n\n.vc-st-modal-content [class|="select"] {\n    margin-bottom: 1em;\n}\n\n.vc-st-modal-content [class|="select"] span {\n    background-color: var(--input-background);\n}\n\n.vc-st-modal-header {\n    justify-content: space-between;\n    align-content: center;\n}\n\n.vc-st-modal-header h1 {\n    margin: 0;\n}\n\n.vc-st-modal-header button {\n    padding: 0;\n}\n\n.vc-st-preview-text {\n    margin-bottom: 1em;\n}\n\n.vc-st-button {\n    padding: 0 6px;\n}\n\n.vc-st-button svg {\n    transform: scale(1.1) translateY(1px);\n}\n';
+var styles_default = '.vbd-st-modal-content input {\n    background-color: var(--input-background);\n    color: var(--text-normal);\n    width: 95%;\n    padding: 8px 8px 8px 12px;\n    margin: 1em 0;\n    outline: none;\n    border: 1px solid var(--input-background);\n    border-radius: 4px;\n    font-weight: 500;\n    font-style: inherit;\n    font-size: 100%;\n}\n\n.vbd-st-format-label,\n.vbd-st-format-label span {\n    background-color: transparent;\n}\n\n.vbd-st-modal-content [class|="select"] {\n    margin-bottom: 1em;\n}\n\n.vbd-st-modal-content [class|="select"] span {\n    background-color: var(--input-background);\n}\n\n.vbd-st-modal-header {\n    justify-content: space-between;\n    align-content: center;\n}\n\n.vbd-st-modal-header h1 {\n    margin: 0;\n}\n\n.vbd-st-modal-header button {\n    padding: 0;\n}\n\n.vbd-st-preview-text {\n    margin-bottom: 1em;\n}\n\n.vbd-st-button {\n    padding: 0 6px;\n}\n\n.vbd-st-button svg {\n    transform: scale(1.1) translateY(1px);\n}\n';
 
 // src/plugins/SendTimestamps/index.jsx
 var Chat = BdApi.Webpack.getModule((m) => m.Z?.type?.render?.toString().includes("chat input type must be set"));

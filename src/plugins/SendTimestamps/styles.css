@@ -1,4 +1,4 @@
-.vc-st-modal-content input {
+.vbd-st-modal-content input {
     background-color: var(--input-background);
     color: var(--text-normal);
     width: 95%;
@@ -12,40 +12,40 @@
     font-size: 100%;
 }
 
-.vc-st-format-label,
-.vc-st-format-label span {
+.vbd-st-format-label,
+.vbd-st-format-label span {
     background-color: transparent;
 }
 
-.vc-st-modal-content [class|="select"] {
+.vbd-st-modal-content [class|="select"] {
     margin-bottom: 1em;
 }
 
-.vc-st-modal-content [class|="select"] span {
+.vbd-st-modal-content [class|="select"] span {
     background-color: var(--input-background);
 }
 
-.vc-st-modal-header {
+.vbd-st-modal-header {
     justify-content: space-between;
     align-content: center;
 }
 
-.vc-st-modal-header h1 {
+.vbd-st-modal-header h1 {
     margin: 0;
 }
 
-.vc-st-modal-header button {
+.vbd-st-modal-header button {
     padding: 0;
 }
 
-.vc-st-preview-text {
+.vbd-st-preview-text {
     margin-bottom: 1em;
 }
 
-.vc-st-button {
+.vbd-st-button {
     padding: 0 6px;
 }
 
-.vc-st-button svg {
+.vbd-st-button svg {
     transform: scale(1.1) translateY(1px);
 }
