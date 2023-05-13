@@ -3,6 +3,20 @@ import { findInReactTree } from "../../shared/findInReactTree";
 import styles from "~fileContent/styles.css";
 
 const Components = BdApi.Webpack.getModule(m => m.RoleDot);
+const AccessibilityStore = BdApi.Webpack.getModule(m => m.constructor?.displayName === "AccessibilityStore");
+
+let originalRoleStyleDesc: PropertyDescriptor;
+
+function patchRoleStyleSetting() {
+    const desc = Object.getOwnPropertyDescriptor(AccessibilityStore.__proto__, "roleStyle")!;
+    originalRoleStyleDesc = desc;
+
+    Object.defineProperty(AccessibilityStore.__proto__, "roleStyle", {
+        value: "dot",
+        configurable: true,
+        enumerable: false
+    });
+}
 
 function patchRoleDot() {
     BdApi.Patcher.after("better-role-dot", Components, "RoleDot", (_this, [{ color }], res) => {
@@ -74,6 +88,7 @@ function patchRoleMentions() {
 function start() {
     BdApi.DOM.addStyle("better-role-dot", styles);
 
+    patchRoleStyleSetting();
     patchRoleDot();
     patchChatUserNames();
     patchRoleListUserNames();
@@ -83,6 +98,8 @@ function start() {
 function stop() {
     BdApi.DOM.removeStyle("better-role-dot");
     BdApi.Patcher.unpatchAll("better-role-dot");
+
+    if (originalRoleStyleDesc) Object.defineProperty(AccessibilityStore.__proto__, "roleStyle", originalRoleStyleDesc);
 }
 
 module.exports = () => ({
