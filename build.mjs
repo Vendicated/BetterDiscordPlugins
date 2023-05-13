@@ -8,7 +8,7 @@ const isDev = process.argv.includes("--dev");
 const plugins = await Promise.all(
     readdirSync("./src/plugins").map(p =>
         context({
-            entryPoints: [`./src/plugins/${p}/index.jsx`],
+            entryPoints: [`./src/plugins/${p}`],
             outfile: `Plugins/${p}/${p}.plugin.js`,
             minify: false,
             bundle: true,

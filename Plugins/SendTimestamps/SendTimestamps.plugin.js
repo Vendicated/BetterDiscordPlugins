@@ -103,6 +103,13 @@ function ChatBarComponent() {
   )));
 }
 
+// src/shared/findInReactTree.ts
+function findInReactTree(root, filter) {
+  return BdApi.Utils.findInTree(root, filter, {
+    walkable: ["children", "props"]
+  });
+}
+
 // include-file:~fileContent/styles.css
 var styles_default = `.vbd-st-modal-content input {
     background-color: var(--input-background);
@@ -163,9 +170,7 @@ function start() {
   BdApi.DOM.addStyle("send-timestamps", styles_default);
   const unpatchOuter = BdApi.Patcher.after("send-timestamps", Chat.Z.type, "render", (_this, _args, res) => {
     unpatchOuter();
-    const inner = BdApi.Utils.findInTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"), {
-      walkable: ["props", "children"]
-    });
+    const inner = findInReactTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"));
     BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
       if (props.disabled)
         return;
