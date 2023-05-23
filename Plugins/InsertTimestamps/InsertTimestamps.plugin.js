@@ -167,12 +167,12 @@ var styles_default = `.vbd-its-modal-content input {
 // src/plugins/InsertTimestamps/index.jsx
 var Chat = BdApi.Webpack.getModule((m) => m.Z?.type?.render?.toString().includes("chat input type must be set"));
 function start() {
-  BdApi.DOM.addStyle("send-timestamps", styles_default);
-  const unpatchOuter = BdApi.Patcher.after("send-timestamps", Chat.Z.type, "render", (_this, _args, res) => {
+  BdApi.DOM.addStyle("vbd-st", styles_default);
+  const unpatchOuter = BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
     unpatchOuter();
     console.log(res);
     const inner = findInReactTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"));
-    BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
+    BdApi.Patcher.after("vbd-st", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
       if (props.disabled)
         return;
       buttonsRes.props.children.unshift(/* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
@@ -180,8 +180,8 @@ function start() {
   });
 }
 function stop() {
-  BdApi.DOM.removeStyle("send-timestamps");
-  BdApi.Patcher.unpatchAll("send-timestamps");
+  BdApi.DOM.removeStyle("vbd-st");
+  BdApi.Patcher.unpatchAll("vbd-st");
 }
 module.exports = () => ({
   start,
