@@ -10,6 +10,7 @@ function start() {
 
     const unpatchOuter = BdApi.Patcher.after("send-timestamps", Chat.Z.type, "render", (_this, _args, res) => {
         unpatchOuter();
+        console.log(res);
 
         const inner = findInReactTree(res, n => n?.props?.className?.includes("sansAttachButton-"));
 

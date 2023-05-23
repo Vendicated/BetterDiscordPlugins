@@ -1,4 +1,4 @@
-# SendTimestamps
+# InsertTimestamps
 
 Send markdown timestamps with a convenient picker
 

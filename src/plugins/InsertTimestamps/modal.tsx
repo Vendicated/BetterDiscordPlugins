@@ -21,7 +21,7 @@ const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeNam
 const ButtonWrapperClasses = BdApi.Webpack.getModule(m => m.buttonWrapper && m.buttonContent);
 const ComponentDispatch = BdApi.Webpack.getModule(m => m.emitter?._events?.INSERT_TEXT, { searchExports: true });
 
-const cl = (...names: string[]) => names.map(n => `vbd-st-${n}`).join(" ");
+const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 
 const Formats = ["", "t", "T", "d", "D", "f", "F", "R"] as const;
 type Format = (typeof Formats)[number];

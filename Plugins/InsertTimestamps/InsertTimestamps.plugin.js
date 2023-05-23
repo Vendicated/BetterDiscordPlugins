@@ -1,5 +1,5 @@
 /**
- * @name SendTimestamps
+ * @name InsertTimestamps
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
@@ -8,7 +8,7 @@
 
 "use strict";
 
-// src/plugins/SendTimestamps/modal.tsx
+// src/plugins/InsertTimestamps/modal.tsx
 var { useState, useMemo } = BdApi.React;
 var {
   Button,
@@ -29,7 +29,7 @@ var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeNam
 });
 var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
 var ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, { searchExports: true });
-var cl = (...names) => names.map((n) => `vbd-st-${n}`).join(" ");
+var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
   const [value, setValue] = useState();
@@ -111,7 +111,7 @@ function findInReactTree(root, filter) {
 }
 
 // include-file:~fileContent/styles.css
-var styles_default = `.vbd-st-modal-content input {
+var styles_default = `.vbd-its-modal-content input {
     background-color: var(--input-background);
     color: var(--text-normal);
     width: 95%;
@@ -125,51 +125,52 @@ var styles_default = `.vbd-st-modal-content input {
     font-size: 100%;
 }
 
-.vbd-st-format-label,
-.vbd-st-format-label span {
+.vbd-its-format-label,
+.vbd-its-format-label span {
     background-color: transparent;
 }
 
-.vbd-st-modal-content [class|="select"] {
+.vbd-its-modal-content [class|="select"] {
     margin-bottom: 1em;
 }
 
-.vbd-st-modal-content [class|="select"] span {
+.vbd-its-modal-content [class|="select"] span {
     background-color: var(--input-background);
 }
 
-.vbd-st-modal-header {
+.vbd-its-modal-header {
     justify-content: space-between;
     align-content: center;
 }
 
-.vbd-st-modal-header h1 {
+.vbd-its-modal-header h1 {
     margin: 0;
 }
 
-.vbd-st-modal-header button {
+.vbd-its-modal-header button {
     padding: 0;
 }
 
-.vbd-st-preview-text {
+.vbd-its-preview-text {
     margin-bottom: 1em;
 }
 
-.vbd-st-button {
+.vbd-its-button {
     padding: 0 6px;
 }
 
-.vbd-st-button svg {
+.vbd-its-button svg {
     transform: scale(1.1) translateY(1px);
 }
 `;
 
-// src/plugins/SendTimestamps/index.jsx
+// src/plugins/InsertTimestamps/index.jsx
 var Chat = BdApi.Webpack.getModule((m) => m.Z?.type?.render?.toString().includes("chat input type must be set"));
 function start() {
   BdApi.DOM.addStyle("send-timestamps", styles_default);
   const unpatchOuter = BdApi.Patcher.after("send-timestamps", Chat.Z.type, "render", (_this, _args, res) => {
     unpatchOuter();
+    console.log(res);
     const inner = findInReactTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"));
     BdApi.Patcher.after("send-timestamps", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
       if (props.disabled)

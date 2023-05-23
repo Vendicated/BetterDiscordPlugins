@@ -1,5 +1,5 @@
 # Funny BetterDiscord plugins
 
-## [SendTimestamps](/Plugins/SendTimestamps)
+## [InsertTimestamps](/Plugins/InsertTimestamps)
 
 Send markdown timestamps with ease!
