@@ -170,7 +170,6 @@ function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
   const unpatchOuter = BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
     unpatchOuter();
-    console.log(res);
     const inner = findInReactTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"));
     BdApi.Patcher.after("vbd-st", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
       if (props.disabled)
