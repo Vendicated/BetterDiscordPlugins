@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 "use strict";
@@ -28,7 +28,6 @@ var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeNam
   searchExports: true
 });
 var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
-var ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, { searchExports: true });
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
@@ -67,6 +66,9 @@ function PickerModal({ rootProps }) {
     Button,
     {
       onClick: () => {
+        const ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, {
+          searchExports: true
+        });
         ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
           rawText: formatted + " ",
           plainText: formatted + " "
@@ -168,14 +170,19 @@ var styles_default = `.vbd-its-modal-content input {
 var Chat = BdApi.Webpack.getModule((m) => m.Z?.type?.render?.toString().includes("chat input type must be set"));
 function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
-  const unpatchOuter = BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
-    unpatchOuter();
-    const inner = findInReactTree(res, (n) => n?.props?.className?.includes("sansAttachButton-"));
-    BdApi.Patcher.after("vbd-st", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
-      if (props.disabled)
-        return;
-      buttonsRes.props.children.unshift(/* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
-    });
+  BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
+    const chatBar = findInReactTree(
+      res,
+      (n) => Array.isArray(n?.children) && n.children.some((c) => c?.props?.className?.startsWith("attachButton"))
+    )?.children;
+    if (!chatBar) {
+      console.error("InsertTimestamps: Couldn't find ChatBar component in React tree");
+      return;
+    }
+    const buttons = findInReactTree(chatBar, (n) => n?.props?.showCharacterCount);
+    if (buttons?.props.disabled)
+      return;
+    chatBar.splice(-1, 0, /* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
   });
 }
 function stop() {

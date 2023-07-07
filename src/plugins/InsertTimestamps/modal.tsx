@@ -19,7 +19,6 @@ const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeNam
     searchExports: true
 });
 const ButtonWrapperClasses = BdApi.Webpack.getModule(m => m.buttonWrapper && m.buttonContent);
-const ComponentDispatch = BdApi.Webpack.getModule(m => m.emitter?._events?.INSERT_TEXT, { searchExports: true });
 
 const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 
@@ -80,6 +79,11 @@ function PickerModal({ rootProps }: { rootProps: any }) {
             <ModalFooter>
                 <Button
                     onClick={() => {
+                        // Top level is too early to find this so it has to be inline
+                        const ComponentDispatch = BdApi.Webpack.getModule(m => m.emitter?._events?.INSERT_TEXT, {
+                            searchExports: true
+                        });
+
                         ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
                             rawText: formatted + " ",
                             plainText: formatted + " "

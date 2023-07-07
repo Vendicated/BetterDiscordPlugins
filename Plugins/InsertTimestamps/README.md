@@ -9,3 +9,13 @@ Send markdown timestamps with a convenient picker
 ![image](https://github.com/Vendicated/BetterDiscordPlugins/assets/45497981/a35c95fc-93f0-458b-8641-f6a84d77b4d6)
 
 ![image](https://github.com/Vendicated/BetterDiscordPlugins/assets/45497981/14cdfe1a-bcd6-4d69-ade1-783cd668f01f)
+
+<details>
+<summary>Changelog</summary>
+
+## 1.0.1
+
+- More robust patch so the chatbar button is added more reliably. Thanks @TheCommieAxolotl
+- Fixed an issue that would make the Send button not function
+
+</details>

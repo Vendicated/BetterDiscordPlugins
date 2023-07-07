@@ -8,15 +8,21 @@ const Chat = BdApi.Webpack.getModule(m => m.Z?.type?.render?.toString().includes
 function start() {
     BdApi.DOM.addStyle("vbd-st", styles);
 
-    const unpatchOuter = BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
-        unpatchOuter();
+    BdApi.Patcher.after("vbd-st", Chat.Z.type, "render", (_this, _args, res) => {
+        const chatBar = findInReactTree(
+            res,
+            n => Array.isArray(n?.children) && n.children.some(c => c?.props?.className?.startsWith("attachButton"))
+        )?.children;
 
-        const inner = findInReactTree(res, n => n?.props?.className?.includes("sansAttachButton-"));
+        if (!chatBar) {
+            console.error("InsertTimestamps: Couldn't find ChatBar component in React tree");
+            return;
+        }
 
-        BdApi.Patcher.after("vbd-st", inner.props.children[2].type, "type", (_this2, [props], buttonsRes) => {
-            if (props.disabled) return;
-            buttonsRes.props.children.unshift(<ChatBarComponent />);
-        });
+        const buttons = findInReactTree(chatBar, n => n?.props?.showCharacterCount);
+        if (buttons?.props.disabled) return;
+
+        chatBar.splice(-1, 0, <ChatBarComponent />);
     });
 }
 
