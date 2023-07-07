@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 "use strict";
@@ -80,7 +80,7 @@ function PickerModal({ rootProps }) {
   )));
 }
 function ChatBarComponent() {
-  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement("div", { style: { display: "flex" } }, /* @__PURE__ */ BdApi.React.createElement(
+  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ BdApi.React.createElement(
     Button,
     {
       "aria-haspopup": "dialog",

@@ -102,7 +102,7 @@ export function ChatBarComponent() {
     return (
         <Tooltip text="Insert Timestamp">
             {({ onMouseEnter, onMouseLeave }) => (
-                <div style={{ display: "flex" }}>
+                <div style={{ marginTop: 10 }}>
                     <Button
                         aria-haspopup="dialog"
                         aria-label=""
