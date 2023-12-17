@@ -8,7 +8,7 @@ const Chat = BdApi.Webpack.getModule(m => m.default?.type?.render?.toString().in
 function start() {
     BdApi.DOM.addStyle("vbd-st", styles);
 
-    BdApi.Patcher.after("vbd-st", Chat.default, "render", (_this, _args, res) => {
+    BdApi.Patcher.after("vbd-st", Chat.default.type, "render", (_this, _args, res) => {
         const chatBar = findInReactTree(
             res,
             n => Array.isArray(n?.children) && n.children.some(c => c?.props?.className?.startsWith("attachButton"))
