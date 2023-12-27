@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 "use strict";
@@ -170,7 +170,7 @@ var styles_default = `.vbd-its-modal-content input {
 var Chat = BdApi.Webpack.getModule((m) => m.default?.type?.render?.toString().includes("chat input type must be set"));
 function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
-  BdApi.Patcher.after("vbd-st", Chat.Z.default, "render", (_this, _args, res) => {
+  BdApi.Patcher.after("vbd-st", Chat.default.type, "render", (_this, _args, res) => {
     const chatBar = findInReactTree(
       res,
       (n) => Array.isArray(n?.children) && n.children.some((c) => c?.props?.className?.startsWith("attachButton"))
