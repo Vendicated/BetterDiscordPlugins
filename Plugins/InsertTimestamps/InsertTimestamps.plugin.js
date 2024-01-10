@@ -167,22 +167,14 @@ var styles_default = `.vbd-its-modal-content input {
 `;
 
 // src/plugins/InsertTimestamps/index.jsx
-var Chat = BdApi.Webpack.getModule((m) => m.default?.type?.render?.toString().includes("chat input type must be set"));
+var ChannelTextAreaButtons = BdApi.Webpack.getModule((m) => m.type?.toString?.().includes("ChannelTextAreaButtons"));
 function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
-  BdApi.Patcher.after("vbd-st", Chat.default.type, "render", (_this, _args, res) => {
-    const chatBar = findInReactTree(
-      res,
-      (n) => Array.isArray(n?.children) && n.children.some((c) => c?.props?.className?.startsWith("attachButton"))
-    )?.children;
-    if (!chatBar) {
-      console.error("InsertTimestamps: Couldn't find ChatBar component in React tree");
+  BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons, "type", (_this, [{ disabled }], res) => {
+    if (disabled)
       return;
-    }
-    const buttons = findInReactTree(chatBar, (n) => n?.props?.showCharacterCount);
-    if (buttons?.props.disabled)
-      return;
-    chatBar.splice(-1, 0, /* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
+    const buttons = findInReactTree(res, (n) => Array.isArray(n) && n.some((e) => e.key === "emoji"));
+    buttons.splice(0, 0, /* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
   });
 }
 function stop() {
