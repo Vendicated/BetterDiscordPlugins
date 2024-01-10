@@ -11,6 +11,7 @@ function start() {
     BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons, "type", (_this, [{ disabled }], res) => {
         if (disabled) return;
         const buttons = findInReactTree(res, n => Array.isArray(n) && n.some(e => e.key === "emoji"));
+        if (!buttons) return;
         buttons.splice(0, 0, <ChatBarComponent />);
     });
 }

@@ -174,6 +174,8 @@ function start() {
     if (disabled)
       return;
     const buttons = findInReactTree(res, (n) => Array.isArray(n) && n.some((e) => e.key === "emoji"));
+    if (!buttons)
+      return;
     buttons.splice(0, 0, /* @__PURE__ */ BdApi.React.createElement(ChatBarComponent, null));
   });
 }
