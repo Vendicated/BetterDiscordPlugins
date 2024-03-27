@@ -20,6 +20,7 @@ const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeNam
 });
 const CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
 const ButtonWrapperClasses = BdApi.Webpack.getModule(m => m.buttonWrapper && m.buttonContent);
+const ButtonClasses = BdApi.Webpack.getModule(m => m.emojiButton && m.stickerButton);
 
 const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 
@@ -103,25 +104,22 @@ export function ChatBarComponent() {
     return (
         <Tooltip text="Insert Timestamp">
             {({ onMouseEnter, onMouseLeave }) => (
-                <div style={{ marginTop: 10 }}>
-                    <Button
-                        aria-haspopup="dialog"
-                        aria-label=""
-                        size=""
-                        look={Button.Looks.BLANK}
-                        onMouseEnter={onMouseEnter}
-                        onMouseLeave={onMouseLeave}
-                        innerClassName={ButtonWrapperClasses.button}
-                        onClick={() => {
-                            openModal(props => <PickerModal rootProps={props} />);
-                        }}
-                        className={cl("button")}
-                    >
-                        <div className={ButtonWrapperClasses.buttonWrapper}>
-                            <CalendarIcon />
-                        </div>
-                    </Button>
-                </div>
+                <Button
+                    aria-haspopup="dialog"
+                    aria-label=""
+                    size=""
+                    look={Button.Looks.BLANK}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    innerClassName={ButtonWrapperClasses.button}
+                    onClick={() => {
+                        openModal(props => <PickerModal rootProps={props} />);
+                    }}
+                >
+                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}`}>
+                        <CalendarIcon />
+                    </div>
+                </Button>
             )}
         </Tooltip>
     );

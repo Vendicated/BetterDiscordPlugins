@@ -29,6 +29,7 @@ var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeNam
 });
 var CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
 var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
+var ButtonClasses = BdApi.Webpack.getModule((m) => m.emojiButton && m.stickerButton);
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
@@ -81,7 +82,7 @@ function PickerModal({ rootProps }) {
   )));
 }
 function ChatBarComponent() {
-  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ BdApi.React.createElement(
+  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
     Button,
     {
       "aria-haspopup": "dialog",
@@ -93,11 +94,10 @@ function ChatBarComponent() {
       innerClassName: ButtonWrapperClasses.button,
       onClick: () => {
         openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
-      },
-      className: cl("button")
+      }
     },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: ButtonWrapperClasses.buttonWrapper }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
-  )));
+    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
+  ));
 }
 
 // src/shared/findInReactTree.ts
@@ -150,10 +150,6 @@ var styles_default = `.vbd-its-modal-content input {
 
 .vbd-its-preview-text {
     margin-bottom: 1em;
-}
-
-.vbd-its-button {
-    padding: 0 6px;
 }
 `;
 
