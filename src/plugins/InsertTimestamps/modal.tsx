@@ -12,7 +12,7 @@ const {
     Tooltip,
     Select,
     openModal
-} = BdApi.Webpack.getModule(m => m.ModalContent);
+} = BdApi.Webpack.getModule(m => m.ModalContent && m.Tooltip);
 
 const Parser = BdApi.Webpack.getModule(m => m.parseTopic);
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {

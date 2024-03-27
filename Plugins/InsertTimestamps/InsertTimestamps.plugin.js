@@ -22,7 +22,7 @@ var {
   Tooltip,
   Select,
   openModal
-} = BdApi.Webpack.getModule((m) => m.ModalContent);
+} = BdApi.Webpack.getModule((m) => m.ModalContent && m.Tooltip);
 var Parser = BdApi.Webpack.getModule((m) => m.parseTopic);
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
