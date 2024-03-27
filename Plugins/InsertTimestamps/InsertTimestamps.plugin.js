@@ -158,7 +158,7 @@ var styles_default = `.vbd-its-modal-content input {
 `;
 
 // src/plugins/InsertTimestamps/index.jsx
-var ChannelTextAreaButtons = BdApi.Webpack.getModule((m) => m.type?.toString?.().includes("ChannelTextAreaButtons"));
+var ChannelTextAreaButtons = BdApi.Webpack.getModule((m) => m.type?.toString?.().includes("default.getSentUserIds"));
 function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
   BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons, "type", (_this, [{ disabled }], res) => {
