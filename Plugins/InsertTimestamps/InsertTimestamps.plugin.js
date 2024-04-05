@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 "use strict";
@@ -22,12 +22,14 @@ var {
   Tooltip,
   Select,
   openModal
-} = BdApi.Webpack.getModule((m) => m.ModalContent);
-var Parser = BdApi.Webpack.getModule((m) => m.parseTopic);
+} = BdApi.Webpack.getByKeys("ModalContent", "Tooltip");
+var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
 });
-var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
+var CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
+var ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
+var ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
@@ -80,7 +82,7 @@ function PickerModal({ rootProps }) {
   )));
 }
 function ChatBarComponent() {
-  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ BdApi.React.createElement(
+  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
     Button,
     {
       "aria-haspopup": "dialog",
@@ -92,17 +94,10 @@ function ChatBarComponent() {
       innerClassName: ButtonWrapperClasses.button,
       onClick: () => {
         openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
-      },
-      className: cl("button")
-    },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: ButtonWrapperClasses.buttonWrapper }, /* @__PURE__ */ BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width: "24", height: "24", viewBox: "0 0 24 24" }, /* @__PURE__ */ BdApi.React.createElement("g", { fill: "none", "fill-rule": "evenodd" }, /* @__PURE__ */ BdApi.React.createElement(
-      "path",
-      {
-        fill: "currentColor",
-        d: "M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"
       }
-    ), /* @__PURE__ */ BdApi.React.createElement("rect", { width: "24", height: "24" }))))
-  )));
+    },
+    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
+  ));
 }
 
 // src/shared/findInReactTree.ts
@@ -156,18 +151,10 @@ var styles_default = `.vbd-its-modal-content input {
 .vbd-its-preview-text {
     margin-bottom: 1em;
 }
-
-.vbd-its-button {
-    padding: 0 6px;
-}
-
-.vbd-its-button svg {
-    transform: scale(1.1) translateY(1px);
-}
 `;
 
 // src/plugins/InsertTimestamps/index.jsx
-var ChannelTextAreaButtons = BdApi.Webpack.getModule((m) => m.type?.toString?.().includes("ChannelTextAreaButtons"));
+var ChannelTextAreaButtons = BdApi.Webpack.getModule((m) => m.type?.toString?.().includes("default.getSentUserIds"));
 function start() {
   BdApi.DOM.addStyle("vbd-st", styles_default);
   BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons, "type", (_this, [{ disabled }], res) => {
