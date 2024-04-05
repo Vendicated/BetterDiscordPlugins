@@ -12,15 +12,15 @@ const {
     Tooltip,
     Select,
     openModal
-} = BdApi.Webpack.getModule(m => m.ModalContent && m.Tooltip);
+} = BdApi.Webpack.getByKeys("ModalContent", "Tooltip");
 
-const Parser = BdApi.Webpack.getModule(m => m.parseTopic);
+const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
     searchExports: true
 });
 const CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
-const ButtonWrapperClasses = BdApi.Webpack.getModule(m => m.buttonWrapper && m.buttonContent);
-const ButtonClasses = BdApi.Webpack.getModule(m => m.emojiButton && m.stickerButton);
+const ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
+const ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
 
 const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 

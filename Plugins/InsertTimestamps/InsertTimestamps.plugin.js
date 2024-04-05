@@ -22,14 +22,14 @@ var {
   Tooltip,
   Select,
   openModal
-} = BdApi.Webpack.getModule((m) => m.ModalContent && m.Tooltip);
-var Parser = BdApi.Webpack.getModule((m) => m.parseTopic);
+} = BdApi.Webpack.getByKeys("ModalContent", "Tooltip");
+var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
 });
 var CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
-var ButtonWrapperClasses = BdApi.Webpack.getModule((m) => m.buttonWrapper && m.buttonContent);
-var ButtonClasses = BdApi.Webpack.getModule((m) => m.emojiButton && m.stickerButton);
+var ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
+var ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
