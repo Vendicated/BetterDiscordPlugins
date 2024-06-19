@@ -3,7 +3,7 @@ import { findInReactTree } from "../../shared/findInReactTree";
 
 import styles from "~fileContent/styles.css";
 
-const ChannelTextAreaButtons = BdApi.Webpack.getModule(m => m.type?.toString?.().includes("default.getSentUserIds"));
+const ChannelTextAreaButtons = BdApi.Webpack.getModule(m => m.type?.toString?.().includes(".getSentUserIds"));
 
 function start() {
     BdApi.DOM.addStyle("vbd-st", styles);
