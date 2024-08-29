@@ -3,12 +3,12 @@ import { findInReactTree } from "../../shared/findInReactTree";
 
 import styles from "~fileContent/styles.css";
 
-const ChannelTextAreaButtons = BdApi.Webpack.getModule(m => m.type?.toString?.().includes(".getSentUserIds"));
+const ChannelTextAreaButtons = BdApi.Webpack.getModule(m => m.type?.render?.toString?.().includes(".getSentUserIds"));
 
 function start() {
     BdApi.DOM.addStyle("vbd-st", styles);
 
-    BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons, "type", (_this, [{ disabled }], res) => {
+    BdApi.Patcher.after("vbd-st", ChannelTextAreaButtons.type, "render", (_this, [{ disabled }], res) => {
         if (disabled) return;
         const buttons = findInReactTree(res, n => Array.isArray(n) && n.some(e => e.key === "emoji"));
         if (!buttons) return;
