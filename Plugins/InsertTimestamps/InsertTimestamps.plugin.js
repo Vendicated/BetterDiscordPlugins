@@ -10,19 +10,33 @@
 
 // src/plugins/InsertTimestamps/modal.tsx
 var { useState, useMemo } = BdApi.React;
-var Components = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
-  Select: BdApi.Webpack.Filters.byStrings("let{options:"),
-  Button: BdApi.Webpack.Filters.byStrings("submittingFinishedLabel"),
-  FormText: BdApi.Webpack.Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
-  ModalRoot: BdApi.Webpack.Filters.byStrings('.MODAL,"aria-labelledby":'),
-  ModalHeader: BdApi.Webpack.Filters.byStrings(",id:", ".CENTER"),
-  ModalContent: BdApi.Webpack.Filters.byStrings(".content,", "scrollbarType"),
-  ModalFooter: BdApi.Webpack.Filters.byStrings(".footer,"),
-  ModalCloseButton: BdApi.Webpack.Filters.byStrings(".close]:"),
-  FormTitle: BdApi.Webpack.Filters.byStrings('["defaultMargin".concat', '="h5"'),
-  openModal: BdApi.Webpack.Filters.byStrings(",instant:"),
-  Tooltip: BdApi.Webpack.Filters.byStrings("this.renderTooltip()]"),
-  CalendarIcon: BdApi.Webpack.Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
+var { Filters } = BdApi.Webpack;
+var {
+  Button,
+  ModalRoot,
+  ModalHeader,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  FormTitle,
+  FormText,
+  Tooltip,
+  Select,
+  openModal,
+  CalendarIcon
+} = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
+  Select: Filters.byStrings("let{options:"),
+  Button: Filters.byStrings("submittingFinishedLabel"),
+  FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
+  ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
+  ModalHeader: Filters.byStrings(",id:", ".CENTER"),
+  ModalContent: Filters.byStrings(".content,", "scrollbarType"),
+  ModalFooter: Filters.byStrings(".footer,"),
+  ModalCloseButton: Filters.byStrings(".close]:"),
+  FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+  openModal: Filters.byStrings(",instant:"),
+  Tooltip: Filters.byStrings("this.renderTooltip()]"),
+  CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
@@ -41,7 +55,7 @@ function PickerModal({ rootProps }) {
     const formatted2 = formatTimestamp(time, format);
     return [formatted2, Parser.parse(formatted2)];
   }, [time, format]);
-  return /* @__PURE__ */ BdApi.React.createElement(Components.ModalRoot, { ...rootProps }, /* @__PURE__ */ BdApi.React.createElement(Components.ModalHeader, { className: cl("modal-header") }, /* @__PURE__ */ BdApi.React.createElement(Components.FormTitle, { tag: "h2" }, "Timestamp Picker"), /* @__PURE__ */ BdApi.React.createElement(Components.ModalCloseButton, { onClick: rootProps.onClose })), /* @__PURE__ */ BdApi.React.createElement(Components.ModalContent, { className: cl("modal-content") }, /* @__PURE__ */ BdApi.React.createElement(
+  return /* @__PURE__ */ BdApi.React.createElement(ModalRoot, { ...rootProps }, /* @__PURE__ */ BdApi.React.createElement(ModalHeader, { className: cl("modal-header") }, /* @__PURE__ */ BdApi.React.createElement(FormTitle, { tag: "h2" }, "Timestamp Picker"), /* @__PURE__ */ BdApi.React.createElement(ModalCloseButton, { onClick: rootProps.onClose })), /* @__PURE__ */ BdApi.React.createElement(ModalContent, { className: cl("modal-content") }, /* @__PURE__ */ BdApi.React.createElement(
     "input",
     {
       type: "datetime-local",
@@ -51,8 +65,8 @@ function PickerModal({ rootProps }) {
         colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
       }
     }
-  ), /* @__PURE__ */ BdApi.React.createElement(Components.FormTitle, null, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
-    Components.Select,
+  ), /* @__PURE__ */ BdApi.React.createElement(FormTitle, null, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
+    Select,
     {
       options: Formats.map((m) => ({
         label: m,
@@ -64,8 +78,8 @@ function PickerModal({ rootProps }) {
       renderOptionLabel: (o) => /* @__PURE__ */ BdApi.React.createElement("div", { className: cl("format-label") }, Parser.parse(formatTimestamp(time, o.value))),
       renderOptionValue: () => rendered
     }
-  ), /* @__PURE__ */ BdApi.React.createElement(Components.FormTitle, { className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(Components.FormText, { className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(Components.ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
-    Components.Button,
+  ), /* @__PURE__ */ BdApi.React.createElement(FormTitle, { className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(FormText, { className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
+    Button,
     {
       onClick: () => {
         const ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, {
@@ -82,21 +96,21 @@ function PickerModal({ rootProps }) {
   )));
 }
 function ChatBarComponent() {
-  return /* @__PURE__ */ BdApi.React.createElement(Components.Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
-    Components.Button,
+  return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
+    Button,
     {
       "aria-haspopup": "dialog",
       "aria-label": "",
       size: "",
-      look: Components.Button.Looks.BLANK,
+      look: Button.Looks.BLANK,
       onMouseEnter,
       onMouseLeave,
       innerClassName: ButtonWrapperClasses.button,
       onClick: () => {
-        Components.openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
+        openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
       }
     },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(Components.CalendarIcon, null))
+    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
   ));
 }
 
