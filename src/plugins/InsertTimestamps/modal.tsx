@@ -1,5 +1,6 @@
 const { useState, useMemo } = BdApi.React as typeof import("react");
 
+const { Filters } = BdApi.Webpack;
 const {
     Button,
     ModalRoot,
@@ -11,16 +12,30 @@ const {
     FormText,
     Tooltip,
     Select,
-    openModal
-} = BdApi.Webpack.getByKeys("ModalContent", "Tooltip");
+    openModal,
+    CalendarIcon
+} = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
+    Select: Filters.byStrings("let{options:"),
+    Button: Filters.byStrings("submittingFinishedLabel"),
+    FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
+    ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
+    ModalHeader: Filters.byStrings(",id:", ".CENTER"),
+    ModalContent: Filters.byStrings(".content,", "scrollbarType"),
+    ModalFooter: Filters.byStrings(".footer,"),
+    ModalCloseButton: Filters.byStrings(".close]:"),
+    FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+    openModal: Filters.byStrings(",instant:"),
+    Tooltip: Filters.byStrings("this.renderTooltip()]"),
+    CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
+});
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
     searchExports: true
 });
-const CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
 const ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
 const ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
+const IconClasses = BdApi.Webpack.getByKeys("iconContainer", "trinketsIcon");
 
 const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 
@@ -111,13 +126,14 @@ export function ChatBarComponent() {
                     look={Button.Looks.BLANK}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    innerClassName={ButtonWrapperClasses.button}
                     onClick={() => {
                         openModal(props => <PickerModal rootProps={props} />);
                     }}
                 >
-                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}`}>
+                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}`}>
+                        <div className={IconClasses.iconContainer}>
                         <CalendarIcon />
+                        </div>
                     </div>
                 </Button>
             )}

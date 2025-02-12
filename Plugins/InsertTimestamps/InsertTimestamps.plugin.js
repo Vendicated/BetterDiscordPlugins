@@ -3,13 +3,14 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.6
+ * @version 1.0.7
  */
 
 "use strict";
 
 // src/plugins/InsertTimestamps/modal.tsx
 var { useState, useMemo } = BdApi.React;
+var { Filters } = BdApi.Webpack;
 var {
   Button,
   ModalRoot,
@@ -21,15 +22,29 @@ var {
   FormText,
   Tooltip,
   Select,
-  openModal
-} = BdApi.Webpack.getByKeys("ModalContent", "Tooltip");
+  openModal,
+  CalendarIcon
+} = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
+  Select: Filters.byStrings("let{options:"),
+  Button: Filters.byStrings("submittingFinishedLabel"),
+  FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
+  ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
+  ModalHeader: Filters.byStrings(",id:", ".CENTER"),
+  ModalContent: Filters.byStrings(".content,", "scrollbarType"),
+  ModalFooter: Filters.byStrings(".footer,"),
+  ModalCloseButton: Filters.byStrings(".close]:"),
+  FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+  openModal: Filters.byStrings(",instant:"),
+  Tooltip: Filters.byStrings("this.renderTooltip()]"),
+  CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
+});
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
 });
-var CalendarIcon = BdApi.Webpack.getByKeys("CalendarIcon")?.CalendarIcon;
 var ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
 var ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
+var IconClasses = BdApi.Webpack.getByKeys("iconContainer", "trinketsIcon");
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
@@ -91,12 +106,11 @@ function ChatBarComponent() {
       look: Button.Looks.BLANK,
       onMouseEnter,
       onMouseLeave,
-      innerClassName: ButtonWrapperClasses.button,
       onClick: () => {
         openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
       }
     },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
+    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement("div", { className: IconClasses.iconContainer }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null)))
   ));
 }
 
