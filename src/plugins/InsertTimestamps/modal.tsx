@@ -35,6 +35,7 @@ const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeNam
 });
 const ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
 const ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
+const IconClasses = BdApi.Webpack.getByKeys("iconContainer", "trinketsIcon");
 
 const cl = (...names: string[]) => names.map(n => `vbd-its-${n}`).join(" ");
 
@@ -125,13 +126,14 @@ export function ChatBarComponent() {
                     look={Button.Looks.BLANK}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    innerClassName={ButtonWrapperClasses.button}
                     onClick={() => {
                         openModal(props => <PickerModal rootProps={props} />);
                     }}
                 >
-                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}`}>
+                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}`}>
+                        <div className={IconClasses.iconContainer}>
                         <CalendarIcon />
+                        </div>
                     </div>
                 </Button>
             )}

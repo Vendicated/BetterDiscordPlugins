@@ -44,6 +44,7 @@ var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeNam
 });
 var ButtonWrapperClasses = BdApi.Webpack.getByKeys("buttonWrapper", "buttonContent");
 var ButtonClasses = BdApi.Webpack.getByKeys("emojiButton", "stickerButton");
+var IconClasses = BdApi.Webpack.getByKeys("iconContainer", "trinketsIcon");
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
@@ -105,12 +106,11 @@ function ChatBarComponent() {
       look: Button.Looks.BLANK,
       onMouseEnter,
       onMouseLeave,
-      innerClassName: ButtonWrapperClasses.button,
       onClick: () => {
         openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
       }
     },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
+    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement("div", { className: IconClasses.iconContainer }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null)))
   ));
 }
 
