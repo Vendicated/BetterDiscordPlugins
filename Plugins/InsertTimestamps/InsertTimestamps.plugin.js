@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.8
+ * @version 1.0.9
  */
 
 "use strict";
@@ -12,7 +12,6 @@
 var { useState, useMemo } = BdApi.React;
 var { Filters } = BdApi.Webpack;
 var {
-  Button,
   ModalRoot,
   ModalHeader,
   ModalCloseButton,
@@ -26,7 +25,6 @@ var {
   CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
   Select: Filters.byStrings("let{options:"),
-  Button: Filters.byStrings("submittingFinishedLabel"),
   FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
   ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
   ModalHeader: Filters.byStrings(",id:", ".CENTER"),
@@ -38,6 +36,7 @@ var {
   Tooltip: Filters.byStrings("this.renderTooltip()]"),
   CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
+var Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
@@ -103,14 +102,20 @@ function ChatBarComponent() {
       "aria-haspopup": "dialog",
       "aria-label": "",
       size: "",
-      look: Button.Looks.BLANK,
+      look: Button?.Looks?.BLANK,
       onMouseEnter,
       onMouseLeave,
       onClick: () => {
         openModal((props) => /* @__PURE__ */ BdApi.React.createElement(PickerModal, { rootProps: props }));
       }
     },
-    /* @__PURE__ */ BdApi.React.createElement("div", { className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}` }, /* @__PURE__ */ BdApi.React.createElement("div", { className: IconClasses.iconContainer }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null)))
+    /* @__PURE__ */ BdApi.React.createElement(
+      "div",
+      {
+        className: `${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}`
+      },
+      /* @__PURE__ */ BdApi.React.createElement("div", { className: IconClasses.iconContainer }, /* @__PURE__ */ BdApi.React.createElement(CalendarIcon, null))
+    )
   ));
 }
 

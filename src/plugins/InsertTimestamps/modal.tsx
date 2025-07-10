@@ -2,7 +2,6 @@ const { useState, useMemo } = BdApi.React as typeof import("react");
 
 const { Filters } = BdApi.Webpack;
 const {
-    Button,
     ModalRoot,
     ModalHeader,
     ModalCloseButton,
@@ -16,7 +15,6 @@ const {
     CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
     Select: Filters.byStrings("let{options:"),
-    Button: Filters.byStrings("submittingFinishedLabel"),
     FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
     ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
     ModalHeader: Filters.byStrings(",id:", ".CENTER"),
@@ -28,6 +26,7 @@ const {
     Tooltip: Filters.byStrings("this.renderTooltip()]"),
     CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
+const Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
@@ -123,16 +122,18 @@ export function ChatBarComponent() {
                     aria-haspopup="dialog"
                     aria-label=""
                     size=""
-                    look={Button.Looks.BLANK}
+                    look={Button?.Looks?.BLANK}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     onClick={() => {
                         openModal(props => <PickerModal rootProps={props} />);
                     }}
                 >
-                    <div className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}`}>
+                    <div
+                        className={`${ButtonWrapperClasses.buttonWrapper} ${ButtonClasses.button} ${ButtonWrapperClasses.button}`}
+                    >
                         <div className={IconClasses.iconContainer}>
-                        <CalendarIcon />
+                            <CalendarIcon />
                         </div>
                     </div>
                 </Button>
