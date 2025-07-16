@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.9
+ * @version 1.0.10
  */
 
 "use strict";
@@ -129,7 +129,7 @@ function findInReactTree(root, filter) {
 // include-file:~fileContent/styles.css
 var styles_default = `.vbd-its-modal-content input {
     background-color: var(--input-background);
-    color: var(--text-normal);
+    color: var(--text-default);
     width: 95%;
     padding: 8px 8px 8px 12px;
     margin: 1em 0;
