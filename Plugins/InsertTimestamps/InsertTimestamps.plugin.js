@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.10
+ * @version 1.0.11
  */
 
 "use strict";
@@ -18,14 +18,12 @@ var {
   ModalContent,
   ModalFooter,
   FormTitle,
-  FormText,
   Tooltip,
   Select,
   openModal,
   CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
   Select: Filters.byStrings("let{options:"),
-  FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
   ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
   ModalHeader: Filters.byStrings(",id:", ".CENTER"),
   ModalContent: Filters.byStrings(".content,", "scrollbarType"),
@@ -37,6 +35,7 @@ var {
   CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
 var Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
+var FormText = BdApi.Webpack.getModule((m) => m.render?.toString?.().includes("WebkitLineClamp"), { searchExports: true });
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
@@ -165,6 +164,10 @@ var styles_default = `.vbd-its-modal-content input {
 
 .vbd-its-modal-header button {
     padding: 0;
+}
+
+.vbd-its-preview-title {
+    margin: 1em 0;
 }
 
 .vbd-its-preview-text {

@@ -8,14 +8,12 @@ const {
     ModalContent,
     ModalFooter,
     FormTitle,
-    FormText,
     Tooltip,
     Select,
     openModal,
     CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
     Select: Filters.byStrings("let{options:"),
-    FormText: Filters.byStrings(".SELECTABLE),", ".DISABLED:"),
     ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
     ModalHeader: Filters.byStrings(",id:", ".CENTER"),
     ModalContent: Filters.byStrings(".content,", "scrollbarType"),
@@ -27,6 +25,7 @@ const {
     CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
 const Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
+const FormText = BdApi.Webpack.getModule((m) => m.render?.toString?.().includes("WebkitLineClamp"), {searchExports:true});
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {

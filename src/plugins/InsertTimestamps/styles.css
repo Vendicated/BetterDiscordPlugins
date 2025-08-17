@@ -38,6 +38,10 @@
     padding: 0;
 }
 
+.vbd-its-preview-title {
+    margin: 1em 0;
+}
+
 .vbd-its-preview-text {
     margin-bottom: 1em;
 }
