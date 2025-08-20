@@ -7,7 +7,7 @@ const {
     ModalCloseButton,
     ModalContent,
     ModalFooter,
-    FormTitle,
+    Text,
     Tooltip,
     Select,
     openModal,
@@ -19,13 +19,12 @@ const {
     ModalContent: Filters.byStrings(".content,", "scrollbarType"),
     ModalFooter: Filters.byStrings(".footer,"),
     ModalCloseButton: Filters.byStrings(".close]:"),
-    FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+    Text: m => m.render?.toString?.().includes('case"always-white"'),
     openModal: Filters.byStrings(",instant:"),
     Tooltip: Filters.byStrings("this.renderTooltip()]"),
     CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
 const Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
-const FormText = BdApi.Webpack.getModule((m) => m.render?.toString?.().includes("WebkitLineClamp"), {searchExports:true});
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
@@ -55,7 +54,7 @@ function PickerModal({ rootProps }: { rootProps: any }) {
     return (
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
-                <FormTitle tag="h2">Timestamp Picker</FormTitle>
+                <Text variant="heading-md/bold">Timestamp Picker</Text>
 
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>
@@ -70,7 +69,7 @@ function PickerModal({ rootProps }: { rootProps: any }) {
                     }}
                 />
 
-                <FormTitle>Timestamp Format</FormTitle>
+                <Text variant="heading-md/bold">Timestamp Format</Text>
                 <Select
                     options={Formats.map(m => ({
                         label: m,
@@ -85,10 +84,10 @@ function PickerModal({ rootProps }: { rootProps: any }) {
                     renderOptionValue={() => rendered}
                 />
 
-                <FormTitle className={cl("preview-title")}>Preview</FormTitle>
-                <FormText className={cl("preview-text")}>
+                <Text variant="heading-md/bold" className={cl("preview-title")}>Preview</Text>
+                <Text variant="heading-sm/normal" className={cl("preview-text")}>
                     {rendered} ({formatted})
-                </FormText>
+                </Text>
             </ModalContent>
 
             <ModalFooter>

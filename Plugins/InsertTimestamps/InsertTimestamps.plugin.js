@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.11
+ * @version 1.0.12
  */
 
 "use strict";
@@ -17,7 +17,7 @@ var {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  FormTitle,
+  Text,
   Tooltip,
   Select,
   openModal,
@@ -29,13 +29,12 @@ var {
   ModalContent: Filters.byStrings(".content,", "scrollbarType"),
   ModalFooter: Filters.byStrings(".footer,"),
   ModalCloseButton: Filters.byStrings(".close]:"),
-  FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+  Text: (m) => m.render?.toString?.().includes('case"always-white"'),
   openModal: Filters.byStrings(",instant:"),
   Tooltip: Filters.byStrings("this.renderTooltip()]"),
   CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
 var Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
-var FormText = BdApi.Webpack.getModule((m) => m.render?.toString?.().includes("WebkitLineClamp"), { searchExports: true });
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
@@ -54,7 +53,7 @@ function PickerModal({ rootProps }) {
     const formatted2 = formatTimestamp(time, format);
     return [formatted2, Parser.parse(formatted2)];
   }, [time, format]);
-  return /* @__PURE__ */ BdApi.React.createElement(ModalRoot, { ...rootProps }, /* @__PURE__ */ BdApi.React.createElement(ModalHeader, { className: cl("modal-header") }, /* @__PURE__ */ BdApi.React.createElement(FormTitle, { tag: "h2" }, "Timestamp Picker"), /* @__PURE__ */ BdApi.React.createElement(ModalCloseButton, { onClick: rootProps.onClose })), /* @__PURE__ */ BdApi.React.createElement(ModalContent, { className: cl("modal-content") }, /* @__PURE__ */ BdApi.React.createElement(
+  return /* @__PURE__ */ BdApi.React.createElement(ModalRoot, { ...rootProps }, /* @__PURE__ */ BdApi.React.createElement(ModalHeader, { className: cl("modal-header") }, /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold" }, "Timestamp Picker"), /* @__PURE__ */ BdApi.React.createElement(ModalCloseButton, { onClick: rootProps.onClose })), /* @__PURE__ */ BdApi.React.createElement(ModalContent, { className: cl("modal-content") }, /* @__PURE__ */ BdApi.React.createElement(
     "input",
     {
       type: "datetime-local",
@@ -64,7 +63,7 @@ function PickerModal({ rootProps }) {
         colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
       }
     }
-  ), /* @__PURE__ */ BdApi.React.createElement(FormTitle, null, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
+  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold" }, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
     Select,
     {
       options: Formats.map((m) => ({
@@ -77,7 +76,7 @@ function PickerModal({ rootProps }) {
       renderOptionLabel: (o) => /* @__PURE__ */ BdApi.React.createElement("div", { className: cl("format-label") }, Parser.parse(formatTimestamp(time, o.value))),
       renderOptionValue: () => rendered
     }
-  ), /* @__PURE__ */ BdApi.React.createElement(FormTitle, { className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(FormText, { className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
+  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-sm/normal", className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
     Button,
     {
       onClick: () => {
