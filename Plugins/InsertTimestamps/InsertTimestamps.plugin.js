@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.12
+ * @version 1.0.13
  */
 
 "use strict";
@@ -11,6 +11,7 @@
 // src/plugins/InsertTimestamps/modal.tsx
 var { useState, useMemo } = BdApi.React;
 var { Filters } = BdApi.Webpack;
+var { Button, DropdownInput, Tooltip } = BdApi.Components;
 var {
   ModalRoot,
   ModalHeader,
@@ -18,23 +19,18 @@ var {
   ModalContent,
   ModalFooter,
   Text,
-  Tooltip,
-  Select,
   openModal,
   CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
-  Select: Filters.byStrings("let{options:"),
   ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
   ModalHeader: Filters.byStrings(",id:", ".CENTER"),
   ModalContent: Filters.byStrings(".content,", "scrollbarType"),
-  ModalFooter: Filters.byStrings(".footer,"),
+  ModalFooter: Filters.byStrings(".footer,", ".Direction.HORIZONTAL_REVERSE"),
   ModalCloseButton: Filters.byStrings(".close]:"),
   Text: (m) => m.render?.toString?.().includes('case"always-white"'),
   openModal: Filters.byStrings(",instant:"),
-  Tooltip: Filters.byStrings("this.renderTooltip()]"),
   CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
-var Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
@@ -63,18 +59,14 @@ function PickerModal({ rootProps }) {
         colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
       }
     }
-  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold" }, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
-    Select,
+  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
+    DropdownInput,
     {
       options: Formats.map((m) => ({
-        label: m,
+        label: Parser.parse(formatTimestamp(time, m)),
         value: m
       })),
-      isSelected: (v) => v === format,
-      select: (v) => setFormat(v),
-      serialize: (v) => v,
-      renderOptionLabel: (o) => /* @__PURE__ */ BdApi.React.createElement("div", { className: cl("format-label") }, Parser.parse(formatTimestamp(time, o.value))),
-      renderOptionValue: () => rendered
+      onChange: (v) => setFormat(v)
     }
   ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-sm/normal", className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
     Button,
@@ -97,6 +89,7 @@ function ChatBarComponent() {
   return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
     Button,
     {
+      className: cl("text-area-button"),
       "aria-haspopup": "dialog",
       "aria-label": "",
       size: "",
@@ -126,30 +119,18 @@ function findInReactTree(root, filter) {
 
 // include-file:~fileContent/styles.css
 var styles_default = `.vbd-its-modal-content input {
+    position: relative;
     background-color: var(--input-background);
     color: var(--text-default);
-    width: 95%;
-    padding: 8px 8px 8px 12px;
+    width: -webkit-fill-available;
+    padding: 8px 12px;
     margin: 1em 0;
     outline: none;
-    border: 1px solid var(--input-background);
-    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
     font-weight: 500;
     font-style: inherit;
-    font-size: 100%;
-}
-
-.vbd-its-format-label,
-.vbd-its-format-label span {
-    background-color: transparent;
-}
-
-.vbd-its-modal-content [class|="select"] {
-    margin-bottom: 1em;
-}
-
-.vbd-its-modal-content [class|="select"] span {
-    background-color: var(--input-background);
+    font-size: 16px;
 }
 
 .vbd-its-modal-header {
@@ -157,15 +138,13 @@ var styles_default = `.vbd-its-modal-content input {
     align-content: center;
 }
 
-.vbd-its-modal-header h1 {
-    margin: 0;
-}
-
-.vbd-its-modal-header button {
+.vbd-its-modal-header button,
+.vbd-its-text-area-button {
     padding: 0;
 }
 
-.vbd-its-preview-title {
+.vbd-its-preview-title,
+.vbd-its-format-title {
     margin: 1em 0;
 }
 
