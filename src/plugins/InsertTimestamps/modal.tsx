@@ -1,31 +1,26 @@
 const { useState, useMemo } = BdApi.React as typeof import("react");
 
 const { Filters } = BdApi.Webpack;
+const { Button, DropdownInput, Tooltip } = BdApi.Components;
 const {
     ModalRoot,
     ModalHeader,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
-    FormTitle,
-    Tooltip,
-    Select,
+    Text,
     openModal,
     CalendarIcon
 } = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
-    Select: Filters.byStrings("let{options:"),
     ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
     ModalHeader: Filters.byStrings(",id:", ".CENTER"),
     ModalContent: Filters.byStrings(".content,", "scrollbarType"),
-    ModalFooter: Filters.byStrings(".footer,"),
+    ModalFooter: Filters.byStrings(".footer,", ".Direction.HORIZONTAL_REVERSE"),
     ModalCloseButton: Filters.byStrings(".close]:"),
-    FormTitle: Filters.byStrings('["defaultMargin".concat', '="h5"'),
+    Text: m => m.render?.toString?.().includes('case"always-white"'),
     openModal: Filters.byStrings(",instant:"),
-    Tooltip: Filters.byStrings("this.renderTooltip()]"),
     CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
 });
-const Button = BdApi.Webpack.getByStrings(".disabledButtonWrapper", { searchExports: true });
-const FormText = BdApi.Webpack.getModule((m) => m.render?.toString?.().includes("WebkitLineClamp"), {searchExports:true});
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
@@ -55,7 +50,7 @@ function PickerModal({ rootProps }: { rootProps: any }) {
     return (
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
-                <FormTitle tag="h2">Timestamp Picker</FormTitle>
+                <Text variant="heading-md/bold">Timestamp Picker</Text>
 
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>
@@ -70,25 +65,19 @@ function PickerModal({ rootProps }: { rootProps: any }) {
                     }}
                 />
 
-                <FormTitle>Timestamp Format</FormTitle>
-                <Select
+                <Text variant="heading-md/bold" className={cl("preview-title")} >Timestamp Format</Text>
+                <DropdownInput
                     options={Formats.map(m => ({
-                        label: m,
+                        label: Parser.parse(formatTimestamp(time, m)),
                         value: m
                     }))}
-                    isSelected={v => v === format}
-                    select={v => setFormat(v)}
-                    serialize={v => v}
-                    renderOptionLabel={o => (
-                        <div className={cl("format-label")}>{Parser.parse(formatTimestamp(time, o.value))}</div>
-                    )}
-                    renderOptionValue={() => rendered}
+                    onChange={v => setFormat(v)}
                 />
 
-                <FormTitle className={cl("preview-title")}>Preview</FormTitle>
-                <FormText className={cl("preview-text")}>
+                <Text variant="heading-md/bold" className={cl("preview-title")}>Preview</Text>
+                <Text variant="heading-sm/normal" className={cl("preview-text")}>
                     {rendered} ({formatted})
-                </FormText>
+                </Text>
             </ModalContent>
 
             <ModalFooter>
@@ -118,6 +107,7 @@ export function ChatBarComponent() {
         <Tooltip text="Insert Timestamp">
             {({ onMouseEnter, onMouseLeave }) => (
                 <Button
+                    className={cl("text-area-button")}
                     aria-haspopup="dialog"
                     aria-label=""
                     size=""

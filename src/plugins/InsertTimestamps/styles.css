@@ -1,28 +1,16 @@
 .vbd-its-modal-content input {
+    position: relative;
     background-color: var(--input-background);
     color: var(--text-default);
-    width: 95%;
-    padding: 8px 8px 8px 12px;
+    width: -webkit-fill-available;
+    padding: 8px 12px;
     margin: 1em 0;
     outline: none;
-    border: 1px solid var(--input-background);
-    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
     font-weight: 500;
     font-style: inherit;
-    font-size: 100%;
-}
-
-.vbd-its-format-label,
-.vbd-its-format-label span {
-    background-color: transparent;
-}
-
-.vbd-its-modal-content [class|="select"] {
-    margin-bottom: 1em;
-}
-
-.vbd-its-modal-content [class|="select"] span {
-    background-color: var(--input-background);
+    font-size: 16px;
 }
 
 .vbd-its-modal-header {
@@ -30,15 +18,13 @@
     align-content: center;
 }
 
-.vbd-its-modal-header h1 {
-    margin: 0;
-}
-
-.vbd-its-modal-header button {
+.vbd-its-modal-header button,
+.vbd-its-text-area-button {
     padding: 0;
 }
 
-.vbd-its-preview-title {
+.vbd-its-preview-title,
+.vbd-its-format-title {
     margin: 1em 0;
 }
 
