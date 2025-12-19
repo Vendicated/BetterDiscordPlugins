@@ -1,26 +1,14 @@
 const { useState, useMemo } = BdApi.React as typeof import("react");
 
 const { Filters } = BdApi.Webpack;
-const { Button, DropdownInput, Tooltip } = BdApi.Components;
-const {
-    ModalRoot,
-    ModalHeader,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    Text,
-    openModal,
-    CalendarIcon
-} = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
-    ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
-    ModalHeader: Filters.byStrings(",id:", ".CENTER"),
-    ModalContent: Filters.byStrings(".content,", "scrollbarType"),
-    ModalFooter: Filters.byStrings(".footer,", ".Direction.HORIZONTAL_REVERSE"),
-    ModalCloseButton: Filters.byStrings(".close]:"),
-    Text: m => m.render?.toString?.().includes('case"always-white"'),
-    openModal: Filters.byStrings(",instant:"),
-    CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
-});
+const { Button, Tooltip } = BdApi.Components;
+const [ Text, CalendarIcon, SingleSelect ] = BdApi.Webpack.getBulk(
+    { filter: m => m.render?.toString?.().includes('case"always-white"'), searchExports: true },
+    { filter: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0"), searchExports: true },
+    { filter: Filters.byStrings("SingleSelect", "selectionMode"), searchExports: true },
+)
+const Modal = BdApi.Webpack.getByKeys("Modal")?.Modal;
+const openModal = BdApi.Webpack.getByKeys("openModal")?.openModal
 
 const Parser = BdApi.Webpack.getByKeys("parseTopic");
 const PreloadedUserSettings = BdApi.Webpack.getModule(m => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
@@ -48,57 +36,54 @@ function PickerModal({ rootProps }: { rootProps: any }) {
     }, [time, format]);
 
     return (
-        <ModalRoot {...rootProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Text variant="heading-md/bold">Timestamp Picker</Text>
+        <Modal
+            title="Timestamp Picker"
+            actions={[{
+                variant: "primary",
+                text: "Insert",
+                onClick: () => {
+                    const ComponentDispatch = BdApi.Webpack.getModule(m => m.emitter?._events?.INSERT_TEXT, {
+                        searchExports: true
+                    });
 
-                <ModalCloseButton onClick={rootProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent className={cl("modal-content")}>
+                    ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
+                        rawText: formatted + " ",
+                        plainText: formatted + " "
+                    });
+                    rootProps.onClose();
+                }
+            }]}
+            {...rootProps}
+        >
+            <>
                 <input
                     type="datetime-local"
                     value={value}
+                    className={cl("datetime-input")}
                     onChange={e => setValue(e.currentTarget.value)}
                     style={{
                         colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
                     }}
                 />
-
-                <Text variant="heading-md/bold" className={cl("preview-title")} >Timestamp Format</Text>
-                <DropdownInput
+                <Text variant="heading-md/bold" className={cl("format-title")} >Timestamp Format</Text>
+                <SingleSelect
                     options={Formats.map(m => ({
                         label: Parser.parse(formatTimestamp(time, m)),
                         value: m
                     }))}
+                    value={format}
+                    renderOptionLabel={o => (
+                        <div className={cl("format-label")}>{Parser.parse(formatTimestamp(time, o.value))}</div>
+                    )}
+                    renderOptionValue={() => rendered}
                     onChange={v => setFormat(v)}
                 />
-
                 <Text variant="heading-md/bold" className={cl("preview-title")}>Preview</Text>
                 <Text variant="heading-sm/normal" className={cl("preview-text")}>
                     {rendered} ({formatted})
                 </Text>
-            </ModalContent>
-
-            <ModalFooter>
-                <Button
-                    onClick={() => {
-                        // Top level is too early to find this so it has to be inline
-                        const ComponentDispatch = BdApi.Webpack.getModule(m => m.emitter?._events?.INSERT_TEXT, {
-                            searchExports: true
-                        });
-
-                        ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
-                            rawText: formatted + " ",
-                            plainText: formatted + " "
-                        });
-                        rootProps.onClose();
-                    }}
-                >
-                    Insert
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+            </>
+        </Modal>
     );
 }
 

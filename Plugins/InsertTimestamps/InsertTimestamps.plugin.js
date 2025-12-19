@@ -3,7 +3,7 @@
  * @author Vendicated
  * @authorId 343383572805058560
  * @description Allows you to insert timestamp markdown with a convenient chat bar button
- * @version 1.0.12
+ * @version 1.0.13
  */
 
 "use strict";
@@ -11,26 +11,14 @@
 // src/plugins/InsertTimestamps/modal.tsx
 var { useState, useMemo } = BdApi.React;
 var { Filters } = BdApi.Webpack;
-var { Button, DropdownInput, Tooltip } = BdApi.Components;
-var {
-  ModalRoot,
-  ModalHeader,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  Text,
-  openModal,
-  CalendarIcon
-} = BdApi.Webpack.getMangled(/ConfirmModal:\(\)=>.{1,3}.ConfirmModal/, {
-  ModalRoot: Filters.byStrings('.MODAL,"aria-labelledby":'),
-  ModalHeader: Filters.byStrings(",id:", ".CENTER"),
-  ModalContent: Filters.byStrings(".content,", "scrollbarType"),
-  ModalFooter: Filters.byStrings(".footer,", ".Direction.HORIZONTAL_REVERSE"),
-  ModalCloseButton: Filters.byStrings(".close]:"),
-  Text: (m) => m.render?.toString?.().includes('case"always-white"'),
-  openModal: Filters.byStrings(",instant:"),
-  CalendarIcon: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0")
-});
+var { Button, Tooltip } = BdApi.Components;
+var [Text, CalendarIcon, SingleSelect] = BdApi.Webpack.getBulk(
+  { filter: (m) => m.render?.toString?.().includes('case"always-white"'), searchExports: true },
+  { filter: Filters.byStrings("M7 1a1 1 0 0 1 1 1v.75c0"), searchExports: true },
+  { filter: Filters.byStrings("SingleSelect", "selectionMode"), searchExports: true }
+);
+var Modal = BdApi.Webpack.getByKeys("Modal")?.Modal;
+var openModal = BdApi.Webpack.getByKeys("openModal")?.openModal;
 var Parser = BdApi.Webpack.getByKeys("parseTopic");
 var PreloadedUserSettings = BdApi.Webpack.getModule((m) => m.ProtoClass?.typeName.endsWith("PreloadedUserSettings"), {
   searchExports: true
@@ -49,41 +37,51 @@ function PickerModal({ rootProps }) {
     const formatted2 = formatTimestamp(time, format);
     return [formatted2, Parser.parse(formatted2)];
   }, [time, format]);
-  return /* @__PURE__ */ BdApi.React.createElement(ModalRoot, { ...rootProps }, /* @__PURE__ */ BdApi.React.createElement(ModalHeader, { className: cl("modal-header") }, /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold" }, "Timestamp Picker"), /* @__PURE__ */ BdApi.React.createElement(ModalCloseButton, { onClick: rootProps.onClose })), /* @__PURE__ */ BdApi.React.createElement(ModalContent, { className: cl("modal-content") }, /* @__PURE__ */ BdApi.React.createElement(
-    "input",
+  return /* @__PURE__ */ BdApi.React.createElement(
+    Modal,
     {
-      type: "datetime-local",
-      value,
-      onChange: (e) => setValue(e.currentTarget.value),
-      style: {
-        colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
-      }
-    }
-  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
-    DropdownInput,
-    {
-      options: Formats.map((m) => ({
-        label: Parser.parse(formatTimestamp(time, m)),
-        value: m
-      })),
-      onChange: (v) => setFormat(v)
-    }
-  ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-sm/normal", className: cl("preview-text") }, rendered, " (", formatted, ")")), /* @__PURE__ */ BdApi.React.createElement(ModalFooter, null, /* @__PURE__ */ BdApi.React.createElement(
-    Button,
-    {
-      onClick: () => {
-        const ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, {
-          searchExports: true
-        });
-        ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
-          rawText: formatted + " ",
-          plainText: formatted + " "
-        });
-        rootProps.onClose();
-      }
+      title: "Timestamp Picker",
+      actions: [{
+        variant: "primary",
+        text: "Insert",
+        onClick: () => {
+          const ComponentDispatch = BdApi.Webpack.getModule((m) => m.emitter?._events?.INSERT_TEXT, {
+            searchExports: true
+          });
+          ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
+            rawText: formatted + " ",
+            plainText: formatted + " "
+          });
+          rootProps.onClose();
+        }
+      }],
+      ...rootProps
     },
-    "Insert"
-  )));
+    /* @__PURE__ */ BdApi.React.createElement(BdApi.React.Fragment, null, /* @__PURE__ */ BdApi.React.createElement(
+      "input",
+      {
+        type: "datetime-local",
+        value,
+        className: cl("datetime-input"),
+        onChange: (e) => setValue(e.currentTarget.value),
+        style: {
+          colorScheme: PreloadedUserSettings.getCurrentValue().appearance.theme === 2 ? "light" : "dark"
+        }
+      }
+    ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("format-title") }, "Timestamp Format"), /* @__PURE__ */ BdApi.React.createElement(
+      SingleSelect,
+      {
+        options: Formats.map((m) => ({
+          label: Parser.parse(formatTimestamp(time, m)),
+          value: m
+        })),
+        value: format,
+        renderOptionLabel: (o) => /* @__PURE__ */ BdApi.React.createElement("div", { className: cl("format-label") }, Parser.parse(formatTimestamp(time, o.value))),
+        renderOptionValue: () => rendered,
+        onChange: (v) => setFormat(v)
+      }
+    ), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-md/bold", className: cl("preview-title") }, "Preview"), /* @__PURE__ */ BdApi.React.createElement(Text, { variant: "heading-sm/normal", className: cl("preview-text") }, rendered, " (", formatted, ")"))
+  );
 }
 function ChatBarComponent() {
   return /* @__PURE__ */ BdApi.React.createElement(Tooltip, { text: "Insert Timestamp" }, ({ onMouseEnter, onMouseLeave }) => /* @__PURE__ */ BdApi.React.createElement(
@@ -118,36 +116,27 @@ function findInReactTree(root, filter) {
 }
 
 // include-file:~fileContent/styles.css
-var styles_default = `.vbd-its-modal-content input {
+var styles_default = `.vbd-its-datetime-input {
     position: relative;
-    background-color: var(--input-background);
+    background-color: var(--input-background-default);
     color: var(--text-default);
     width: -webkit-fill-available;
     padding: 8px 12px;
     margin: 1em 0;
     outline: none;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--input-border-default);
     border-radius: var(--radius-sm);
     font-weight: 500;
     font-style: inherit;
     font-size: 16px;
 }
-
-.vbd-its-modal-header {
-    justify-content: space-between;
-    align-content: center;
-}
-
-.vbd-its-modal-header button,
 .vbd-its-text-area-button {
     padding: 0;
 }
-
 .vbd-its-preview-title,
 .vbd-its-format-title {
     margin: 1em 0;
 }
-
 .vbd-its-preview-text {
     margin-bottom: 1em;
 }
