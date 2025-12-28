@@ -29,7 +29,8 @@ var IconClasses = BdApi.Webpack.getByKeys("iconContainer", "trinketsIcon");
 var cl = (...names) => names.map((n) => `vbd-its-${n}`).join(" ");
 var Formats = ["", "t", "T", "d", "D", "f", "F", "R"];
 function PickerModal({ rootProps }) {
-  const [value, setValue] = useState();
+  //Credit: https://stackoverflow.com/a/62845336 for time conversion
+  const [value, setValue] = useState(() => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16));
   const [format, setFormat] = useState("");
   const time = Math.round((new Date(value).getTime() || Date.now()) / 1e3);
   const formatTimestamp = (time2, format2) => `<t:${time2}${format2 && `:${format2}`}>`;
